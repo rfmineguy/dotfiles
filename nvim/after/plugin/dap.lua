@@ -1,0 +1,31 @@
+-- local dap = require("dap")
+-- print(dap.adapaters)
+-- 
+-- require("dap").adapaters.lldb = {
+-- 	type = "executable",
+-- 	command = "/usr/bin/lldb",
+-- 	name = "lldb"
+-- }
+-- 
+-- print("dap");
+-- 
+-- local lldb = {
+-- 	name = "Launch lldb",
+-- 	type = "lldb",
+-- 	request = "launch",
+-- 	program = function()
+-- 		return vim.fn.input(
+-- 		"Path to executable: ",
+-- 		vim.fn.getcwd() .. "/",
+-- 		"file"
+-- 		)
+-- 	end,
+-- 	cwd = "${workspaceFolder}",
+-- 	stopOnEntry = false,
+-- 	args = {},
+-- 	runInTerminal = false,
+-- }
+-- 
+-- require('dap').configurations.c = {
+-- 	lldb
+-- }

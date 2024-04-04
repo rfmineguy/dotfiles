@@ -12,9 +12,9 @@ The way it works is that it symbolically links the folders/files in **this** dir
 
 ```sh
 Usage:
-  $ sh links.sh create <target>
-  $ sh links.sh remove <target>
-  $ sh links.sh getlinkdir <target>
+  $ sh links.sh create <target>     # creates symlink for target based on linkdir in script
+  $ sh links.sh remove <target>     # removes symlink for the target (effectively uninstalling the configuration)
+  $ sh links.sh getlinkdir <target> # prints out where the target would get linked has create been run instead
 
 Targets:
   nvim    # linkdir in script

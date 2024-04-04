@@ -66,6 +66,7 @@ print(lazy.path)
 lazy.opts = {}
 lazy.setup({
 	-- Plugins here
+	-- { 'christoomey/vim-tmux-navigator' },
 	{ 'folke/tokyonight.nvim' },
 	{ 'nvim-lua/plenary.nvim' },
 	{ 'LinArcX/telescope-command-palette.nvim' },

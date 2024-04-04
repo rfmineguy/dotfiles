@@ -1,11 +1,41 @@
 #!/bin/bash
+readonly TARGET_COUNT=3
+targets=(nvim qtile tmux)
+linkdirs=(~/.config/nvim ~/.config/qtile ~/.tmux.conf)
+
+function fail_if_invalid_target() {
+	for t in ${targets[@]}; do
+		if [[ $t == $1 ]]; then
+			return 1
+		fi
+	done
+	echo "Target '$1' not a valid target choice"
+	usage
+	exit
+}
+
+function get_target_linkdir() {
+	fail_if_invalid_target $1
+	for i in $(seq 0 $(($TARGET_COUNT - 1))); do
+		if [[ ${targets[$i]} == $1 ]]; then
+			linkdir=${linkdirs[$i]}
+		fi
+	done
+}
 
 function usage() {
-	echo "Usage:"
-	echo "  ./links.sh create <target>"
-	echo "  ./links.sh remove <target>"
-	echo "Targets:"
-	echo "  nvim"
+	printf "Usage:\n"
+	printf "===================================================\n"
+	printf "  ./links.sh create <target>\n"
+	printf "  ./links.sh remove <target>\n"
+	printf "  ./links.sh getlinkdir <target>\n"
+	printf "===========+=======================================\n"
+	printf "Target     | Linkdir     \n"
+	printf "===========+=======================================\n"
+	for i in $(seq 0 $(($TARGET_COUNT - 1))); do
+		printf "%-10s | %-10s\n" ${targets[i]} ${linkdirs[i]}
+	done
+	exit
 }
 
 #
@@ -14,19 +44,9 @@ function usage() {
 #   reason
 #
 function fail_if_exists() {
-	if test -d $1; then
+	if test -d $1 || test -e $1; then
 		echo "This script avoids the responsibility of accidentally overwriting your shit if it exists."
 		echo "$1 exists in this case, so manually create a backup to continue"
-		exit
-	fi
-}
-
-function fail_if_config_not_defined() {
-	# Check to see if a config directory is defined
-	if [[ -z "$XDG_CONFIG_HOME" ]]; then
-		echo "Error: This script relies on \$XDG_CONFIG_HOME being defined" >&2
-		echo "Error:   A common location for this is ~/.config" >&2
-		echo "To set this variable run `export XDG_CONFIG_HOME=\<directory\>`"
 		exit
 	fi
 }
@@ -45,25 +65,21 @@ function fail_if_not_symlink() {
 #   is done
 #
 function createSymlink() {
-	local FULL_PATH
-	FULL_PATH="$XDG_CONFIG_HOME/$1"
-	fail_if_exists $FULL_PATH
+	get_target_linkdir $1
+	fail_if_exists $linkdir
 
-	ln -s $(realpath $1) $(realpath $XDG_CONFIG_HOME)/$1
-	echo "Created symlink to : $(realpath $XDG_CONFIG_HOME)/$1"
-}
+ 	ln -s $(realpath $1) $linkdir
+  echo "Created symlink to : $(realpath $XDG_CONFIG_HOME)/$1"
+} 
 
 function removeSymlink() {
-	local FULL_PATH
-	FULL_PATH="$XDG_CONFIG_HOME/$1"
-	echo $FULL_PATH
-	fail_if_not_symlink $FULL_PATH
+	get_target_linkdir $1
+	fail_if_not_symlink $linkdir
 
-	unlink $(realpath $XDG_CONFIG_HOME)/$1
-	echo "Remove symlink for : $(realpath $XDG_CONFIG_HOME)/$1"
+	unlink $linkdir
+	echo "Remove symlink for : $linkdir"
 }
 
-fail_if_config_not_defined
 case $1 in
 	'create')
 		createSymlink $2
@@ -71,6 +87,11 @@ case $1 in
 
 	'remove')
 		removeSymlink $2
+		;;
+
+	'getlinkdir')
+		get_target_linkdir $2
+		echo $linkdir
 		;;
 	
 	*)

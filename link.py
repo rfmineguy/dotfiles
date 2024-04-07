@@ -36,7 +36,6 @@ parser_getlinkdir = subparsers.add_parser('getlinkdir', help='prints the link di
 parser_getlinkdir.add_argument('--target', dest='target', choices=targets.keys(), required=True, type=str, help='target help')
 
 parser_showtargets = subparsers.add_parser('showtargets', help='displays a list of the valid targets')
-
 # Setup the argparse library
 # ====
 

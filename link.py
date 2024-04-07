@@ -10,7 +10,8 @@ if platform.system() != "Linux":
 description = "Utility for symlinking/unlinking configuration files"
 targets = {
     'nvim': '~/.config/nvim',
-    'qtile': '~/.config/qtile'
+    'qtile': '~/.config/qtile',
+    'tmux': '~/.tmux.conf'
 }
 
 class MyParser(argparse.ArgumentParser):

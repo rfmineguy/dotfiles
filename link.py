@@ -3,9 +3,10 @@ import platform
 import os
 import sys
 
-if platform.system() != "Linux":
-    print("This script is only tested for linux")
-    sys.exit(1)
+
+def is_platform_supported():
+    system = platform.system().lower()
+    return system == "linux" or system == "darwin"
 
 description = "Utility for symlinking/unlinking configuration files"
 targets = {
@@ -42,19 +43,24 @@ parser_showtargets = subparsers.add_parser('showtargets', help='displays a list 
 # ====
 # Functions for the target actions
 def create_symlink(target):
-    print(f"Request to create symlink ... ({target}) {os.path.realpath(target)} -> {os.path.expanduser(targets[target])}")
-    if os.path.exists(os.path.expanduser(targets[target])):
-        print(f"Error: \"{os.path.expanduser(targets[target])}\" already exists on your computer. Back it up then rerun this script")
+    full_local_target_path = os.path.realpath(target)
+    full_system_target_path = os.path.expanduser(targets[target])
+
+    print(f"Request to create symlink ... ({target}) {full_local_target_path} -> {full_system_target_path}")
+    if os.path.exists(full_system_target_path):
+        print(f"Error: \"{full_system_target_path}\" already exists on your computer. Back it up then rerun this script")
         sys.exit(1)
-    os.symlink(os.path.realpath(target), os.path.expanduser(targets[target]))
+    os.symlink(full_local_target_path, full_system_target_path)
 
 def remove_symlink(target):
-    print(f"Request to remove symlink ... {target} -> {os.path.expanduser(targets[target])}")
-    if not os.path.exists(os.path.expanduser(targets[target])):
+    full_installed_target_path = os.path.expanduser(targets[target])
+
+    print(f"Request to remove symlink ... {target} -> {full_installed_target_path}")
+    if not os.path.exists(full_installed_target_path):
         print(f"Error: {targets[target]} doesn't exist, cant remove the symlink")
         sys.exit(1)
-    os.unlink(os.path.expanduser(targets[target]))
-    print(f"Unlinked {os.path.expanduser(targets[target])}")
+    os.unlink(full_installed_target_path)
+    print(f"Unlinked {full_installed_target_path}")
 
 def getlinkdir(target):
     print(f"Linkdir of {target} is {targets[target]}")
@@ -62,12 +68,15 @@ def getlinkdir(target):
 def showtargets():
     print("Targets:")
     for key, value in targets.items():
-        print(f'{key:<10}   {value:<10}')
+        print(f'{key:<10}   {value}')
 # Functions for the target actions
 # ====
 
 # ====
 # Peform the action based on the argparse output
+if not is_platform_supported():
+    print("This script is only tested for linux and macos")
+    sys.exit(1)
 if len(sys.argv) == 1:
     parser.print_help(sys.stderr)
     sys.exit(1)

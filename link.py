@@ -12,7 +12,7 @@ description = "Utility for symlinking/unlinking configuration files"
 targets = {
     'nvim': '~/.config/nvim',
     'qtile': '~/.config/qtile',
-    'tmux': '~/.tmux.conf'
+    'tmux': '~/.config/tmux'
 }
 
 class MyParser(argparse.ArgumentParser):

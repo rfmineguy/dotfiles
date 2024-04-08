@@ -15,9 +15,5 @@ Usage:
   $ python3 link.py create --target <target>     # creates symlink for target based on linkdir in script
   $ python3 link.py remove --target <target>     # removes symlink for the target (effectively uninstalling the configuration)
   $ python3 link.py getlinkdir --target <target> # prints out where the target would get linked has create been run instead
-
-Targets:
-  nvim    # linkdir in link.py
-  qtile   # linkdir in link.py
-  tmux    # linkdir in link.py
+  $ python3 link.py showtargets                  # prints a list of the supported targets
 ```

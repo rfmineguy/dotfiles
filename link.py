@@ -10,9 +10,28 @@ def is_platform_supported():
 
 description = "Utility for symlinking/unlinking configuration files"
 targets = {
-    'nvim': '~/.config/nvim',
-    'qtile': '~/.config/qtile',
-    'tmux': '~/.config/tmux'
+    'nvim': {
+        'link': [
+            ('./nvim', '~/.config/nvim')
+        ]
+    },
+    'qtile': {
+        'link': [
+            ('./qtile', '~/.config/qtile')
+        ]
+    },
+    'tmux': {
+        'link': [
+            ('./tmux', '~/.config/tmux')
+        ]
+    },
+    'scripts/dwm': {
+        'link': [
+            ('./scripts/startdwm', '~/bin/startdwm'),
+            ('testing', 'to somewhere')
+        ]
+        #'message': ''
+    }
 }
 
 class MyParser(argparse.ArgumentParser):
@@ -43,13 +62,17 @@ parser_showtargets = subparsers.add_parser('showtargets', help='displays a list 
 # Functions for the target actions
 def create_symlink(target):
     full_local_target_path = os.path.realpath(target)
-    full_system_target_path = os.path.expanduser(targets[target])
+    link_rules = targets[target].link
+    for link in link_rules:
+        print(link)
+    # full_system_target_path = os.path.expanduser(targets[target])
 
-    print(f"Request to create symlink ... ({target}) {full_local_target_path} -> {full_system_target_path}")
-    if os.path.exists(full_system_target_path):
-        print(f"Error: \"{full_system_target_path}\" already exists on your computer. Back it up then rerun this script")
-        sys.exit(1)
-    os.symlink(full_local_target_path, full_system_target_path)
+
+    # print(f"Request to create symlink ... ({target}) {full_local_target_path} -> {full_system_target_path}")
+    # if os.path.exists(full_system_target_path):
+    #     print(f"Error: \"{full_system_target_path}\" already exists on your computer. Back it up then rerun this script")
+    #     sys.exit(1)
+    # os.symlink(full_local_target_path, full_system_target_path)
 
 def remove_symlink(target):
     full_installed_target_path = os.path.expanduser(targets[target])
@@ -65,9 +88,21 @@ def getlinkdir(target):
     print(f"Linkdir of {target} is {targets[target]}")
 
 def showtargets():
-    print("Targets:")
-    for key, value in targets.items():
-        print(f'{key:<10}   {value}')
+    all_links = list(map(lambda v: v['link'], targets.values()))
+    all_links = sum(all_links, [])   #flatten list
+    longestlink_src = 0
+    longestlink_dst = 0
+    for target_link in all_links:
+        if len(target_link[0]) > longestlink_src:
+            longestlink_src = len(target_link[0])
+        if len(target_link[1]) > longestlink_dst:
+            longestlink_dst = len(target_link[1])
+
+    for l in all_links:
+        print('{1:>{0}}'.format(longestlink_src, l[0]), end='')
+        print(' -> ', end='')
+        print('{1:<{0}}'.format(longestlink_dst, l[1]))
+
 # Functions for the target actions
 # ====
 

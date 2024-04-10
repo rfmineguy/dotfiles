@@ -12,7 +12,7 @@ description = "Utility for symlinking/unlinking configuration files"
 targets = {
     'nvim': {
         'link': [
-            ('./nvim', '~/.config/nvim')
+            ('./nvim', '~/.config/nvim'),
         ]
     },
     'qtile': {
@@ -27,8 +27,7 @@ targets = {
     },
     'scripts/dwm': {
         'link': [
-            ('./scripts/startdwm', '~/bin/startdwm'),
-            ('testing', 'to somewhere')
+            ('./scripts/startdwm.sh', '~/bin/startdwm'),  ## Note: ~/bin must already exist
         ]
         #'message': ''
     }
@@ -61,28 +60,33 @@ parser_showtargets = subparsers.add_parser('showtargets', help='displays a list 
 # ====
 # Functions for the target actions
 def create_symlink(target):
-    full_local_target_path = os.path.realpath(target)
-    link_rules = targets[target].link
+    link_rules = targets[target]['link']
     for link in link_rules:
-        print(link)
-    # full_system_target_path = os.path.expanduser(targets[target])
+        system_frm_path = os.path.realpath(link[0])
+        system_tgt_path = os.path.expanduser(link[1])
+        if os.path.exists(system_tgt_path):
+            print(f"Error: \"{system_tgt_path}\" already exists on your computer. Back it up then rerun this script")
+            sys.exit(1)
+        try:
+            print(f"Creating symlink from {system_frm_path} to {system_tgt_path}")
+            os.symlink(system_frm_path, system_tgt_path)
+        except Exception as ex:
+            template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            print(message)
 
-
-    # print(f"Request to create symlink ... ({target}) {full_local_target_path} -> {full_system_target_path}")
-    # if os.path.exists(full_system_target_path):
-    #     print(f"Error: \"{full_system_target_path}\" already exists on your computer. Back it up then rerun this script")
-    #     sys.exit(1)
-    # os.symlink(full_local_target_path, full_system_target_path)
 
 def remove_symlink(target):
-    full_installed_target_path = os.path.expanduser(targets[target])
-
-    print(f"Request to remove symlink ... {target} -> {full_installed_target_path}")
-    if not os.path.exists(full_installed_target_path):
-        print(f"Error: {targets[target]} doesn't exist, cant remove the symlink")
-        sys.exit(1)
-    os.unlink(full_installed_target_path)
-    print(f"Unlinked {full_installed_target_path}")
+    link_rules = targets[target]['link']
+    for link in link_rules:
+        system_frm_path = os.path.realpath(link[0])
+        system_tgt_path = os.path.expanduser(link[1])
+        print(f"Request to remove symlink ... {target} -> {system_tgt_path}")
+        if not os.path.exists(system_tgt_path):
+            print(f"Error: {system_tgt_path} doesn't exist, cant remove the symlink")
+            sys.exit(1)
+        os.unlink(system_tgt_path)
+        print(f"Unlinked {system_tgt_path}")
 
 def getlinkdir(target):
     print(f"Linkdir of {target} is {targets[target]}")
@@ -98,6 +102,8 @@ def showtargets():
         if len(target_link[1]) > longestlink_dst:
             longestlink_dst = len(target_link[1])
 
+    print('{1:^{0}}'.format(longestlink_src + longestlink_dst, "Targets"))
+    print("="*(longestlink_src + longestlink_dst + len(' -> ')))
     for l in all_links:
         print('{1:>{0}}'.format(longestlink_src, l[0]), end='')
         print(' -> ', end='')

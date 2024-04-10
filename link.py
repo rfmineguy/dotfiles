@@ -28,8 +28,8 @@ targets = {
     'scripts/dwm': {
         'link': [
             ('./scripts/startdwm.sh', '~/bin/startdwm'),  ## Note: ~/bin must already exist
-        ]
-        #'message': ''
+        ],
+        'message': 'To finalize this script you must add \"exec ~/bin/startdwm\" to .xinitrc'
     }
 }
 
@@ -60,7 +60,8 @@ parser_showtargets = subparsers.add_parser('showtargets', help='displays a list 
 # ====
 # Functions for the target actions
 def create_symlink(target):
-    link_rules = targets[target]['link']
+    target = targets[target]
+    link_rules = target['link']
     for link in link_rules:
         system_frm_path = os.path.realpath(link[0])
         system_tgt_path = os.path.expanduser(link[1])
@@ -70,6 +71,8 @@ def create_symlink(target):
         try:
             print(f"Creating symlink from {system_frm_path} to {system_tgt_path}")
             os.symlink(system_frm_path, system_tgt_path)
+            if 'message' in target:
+                print(f"Message: {target['message']}")
         except Exception as ex:
             template = "An exception of type {0} occurred. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)

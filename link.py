@@ -3,6 +3,16 @@ import platform
 import os
 import sys
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 def is_platform_supported():
     system = platform.system().lower()
@@ -30,6 +40,12 @@ targets = {
             ('./scripts/startdwm.sh', '~/bin/startdwm'),  ## Note: ~/bin must already exist
         ],
         'message': 'To finalize this script you must add \"exec ~/bin/startdwm\" to .xinitrc'
+    },
+    'xmonad': {
+        'link': [
+            ('./xmonad', '~/.config/xmonad')
+        ],
+        'warning': 'This configuration is by no means ready for use. So don\'t try to use it yet'
     }
 }
 
@@ -66,13 +82,15 @@ def create_symlink(target):
         system_frm_path = os.path.realpath(link[0])
         system_tgt_path = os.path.expanduser(link[1])
         if os.path.exists(system_tgt_path):
-            print(f"Error: \"{system_tgt_path}\" already exists on your computer. Back it up then rerun this script")
+            print(f"{bcolors.FAIL} Error: \"{system_tgt_path}\" already exists on your computer. Back it up then rerun this script {bcolors.ENDC}")
             sys.exit(1)
         try:
             print(f"Creating symlink from {system_frm_path} to {system_tgt_path}")
             os.symlink(system_frm_path, system_tgt_path)
             if 'message' in target:
                 print(f"Message: {target['message']}")
+            if 'warning' in target:
+                print(f"{bcolors.WARNING}Warning: {target['warning']}")
         except Exception as ex:
             template = "An exception of type {0} occurred. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)

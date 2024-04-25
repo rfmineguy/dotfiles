@@ -1,4 +1,4 @@
 ./nvim/lazy-lock.json
 ./tmux-client*
-./xmonad/xmonad/
-./xmonad/xmonad-contrib/
+./xmonad/xmonad
+./xmonad/xmonad-contrib

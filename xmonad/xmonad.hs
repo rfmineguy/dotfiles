@@ -6,6 +6,11 @@ import XMonad.Util.Run
 import XMonad.Hooks.ManageDocks
 import XMonad.Layout.Spacing
 
+-- Make XMonad and Xmobar talk to each other
+import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.StatusBar
+import XMonad.Hooks.StatusBar.PP
+
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
@@ -175,10 +180,9 @@ myStartupHook = do
 
 -- Run xmonad with the settings you specify. No need to modify this.
 --
-main = do 
-	-- monitor 0
+main = do
   xmproc <- spawnPipe "killall xmobar;xmobar -x 0 ~/.config/xmobar/xmobarrc"
-  xmonad $ docks defaults
+	xmonad $ ewmhFullscreen $ ewmh $ xmobarProp $ defaults
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will

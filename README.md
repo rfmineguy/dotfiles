@@ -17,3 +17,9 @@ Usage:
   $ python3 link.py getlinkdir --target <target> # prints out where the target would get linked has create been run instead
   $ python3 link.py showtargets                  # prints a list of the supported targets
 ```
+
+Note: If you'd rather run it like a normal program, you need to give `link.py` executable privileges
+```sh
+$ chmod +x link.py
+$ ./link.py [arguments]
+```

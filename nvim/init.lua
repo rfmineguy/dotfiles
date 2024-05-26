@@ -86,7 +86,7 @@ lazy.setup({
 	{ 'Civitasv/cmake-tools.nvim' },
 	{ 'L3MON4D3/LuaSnip', version = "v2.*", build = "make install_jsregexp", dependencies = { "rafamadriz/friendly-snippets" }},
 	-- Git
-	{ 'NeogitOrg/neogit', dependencies = { "sindrets/diffview.nvim" }, config = true },
+	{ 'NeogitOrg/neogit', dependencies = { "sindrets/diffview.nvim", "ibhagwan/fzf-lua" }, config = true },
 	-- Haskell
 	{
 		'mrcjkb/haskell-tools.nvim',

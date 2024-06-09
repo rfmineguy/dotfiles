@@ -3,3 +3,4 @@
 ./xmonad/xmonad
 ./xmonad/xmonad-contrib
 ./xmonad/.stack-work/
+./tmux/plugins

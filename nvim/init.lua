@@ -68,6 +68,19 @@ lazy.setup({
 	-- Plugins here
 	-- { 'christoomey/vim-tmux-navigator' },
 	{ 'folke/tokyonight.nvim' },
+	{
+		"https://git.sr.ht/~swaits/scratch.nvim",
+		lazy = true,
+		keys = {
+			{ "<leader>bs", "<cmd>Scratch<cr>", desc = "Scratch Buffer", mode = "n" },
+			{ "<leader>bS", "<cmd>ScratchSplit<cr>", desc = "Scratch Buffer (split)", mode = "n" },
+		},
+		cmd = {
+			"Scratch",
+			"ScratchSplit",
+		},
+		opts = {},
+	},
 	{ 'nvim-lua/plenary.nvim' },
 	{ 'LinArcX/telescope-command-palette.nvim' },
 -- or                              , branch = '0.1.x','}

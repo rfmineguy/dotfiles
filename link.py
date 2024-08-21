@@ -29,7 +29,7 @@ targets = {
     },
     'vim': {
         'link': [
-            ('./vim/.vimrc', '~/.vimrc')
+            ('./vim', '~/.vim')
         ]
     },
     'qtile': {

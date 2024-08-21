@@ -27,6 +27,11 @@ targets = {
             ('./nvim', '~/.config/nvim'),
         ]
     },
+    'vim': {
+        'link': [
+            ('./vim/.vimrc', '~/.vimrc')
+        ]
+    },
     'qtile': {
         'link': [
             ('./qtile', '~/.config/qtile')

@@ -1,8 +1,13 @@
 local lsp = require("lsp-zero")
+local lspconfig = require("lspconfig")
 local luasnip = require("luasnip")
 local cmp = require('cmp')
 local cmp_action = require("lsp-zero").cmp_action()
 require("luasnip/loaders/from_vscode").lazy_load()
+
+lspconfig.clangd.setup {
+	cmd = {'clangd', '--header-insertion=never'}
+}
 
 local check_backspace = function()
 	local col = vim.fn.col "." - 1

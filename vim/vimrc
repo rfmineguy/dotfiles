@@ -30,3 +30,11 @@ set wildmenu
 set wildmode=list:longest
 set wildignore=*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
 """ }}}
+
+""" PLUGINS {{{
+call plug#begin('./plugged')
+
+Plug 'tpope/vim-fugitive'
+
+call plug#end()
+""" }}}

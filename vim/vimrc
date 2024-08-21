@@ -4,10 +4,10 @@ filetype plugin on
 filetype indent on
 
 syntax on
-set foldmethod=syntax
 
 """ GENERAL SETTINGS {{{
 colorscheme slate
+set foldmethod=syntax
 set relativenumber
 set shiftwidth=4
 set tabstop=4
@@ -36,5 +36,15 @@ call plug#begin('./plugged')
 
 Plug 'tpope/vim-fugitive'
 
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
 call plug#end()
+""" }}}
+
+""" KEYBINDS {{{
+
+noremap <Leader>f :Files<CR>
+noremap <Leader>gf :GFiles<CR>
+
 """ }}}

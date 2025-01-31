@@ -2,13 +2,14 @@ set nocompatible
 filetype on
 filetype plugin on
 filetype indent on
-
 syntax on
 
 """ GENERAL SETTINGS {{{
 colorscheme slate
 set foldmethod=syntax
+set nofoldenable
 set relativenumber
+set nu
 set shiftwidth=4
 set tabstop=4
 set expandtab
@@ -25,6 +26,8 @@ set hlsearch
 set history=1000
 set mouse=a
 set ttymouse=xterm2
+set bs=eol
+set backspace=indent,eol,start
 
 set wildmenu
 set wildmode=list:longest
@@ -32,19 +35,51 @@ set wildignore=*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
 """ }}}
 
 """ PLUGINS {{{
-call plug#begin('./plugged')
+if has('python3')
+endif
 
-Plug 'tpope/vim-fugitive'
+call plug#begin('~/.vim/plugged')
+
+" Plug 'tpope/vim-fugitive'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
+Plug 'valloric/youcompleteme'
+Plug 'maxbane/vim-asm_ca65'
+" Plug 'leafOfTree/vim-vue-plugin'
+" Plug 'tasn/vim-tsx'
+
+Plug 'vimwiki/vimwiki'
+Plug 'ziglang/zig.vim'
+
 call plug#end()
+""" }}}
+
+""" PLUGIN CONFIGURATION {{{
+augroup filtypedetect
+    au BufNewFile,BufRead *.s,*.inc set ft=asm_ca65
+augroup end
+
+autocmd BufRead *.asm set filetype=kickass
+
+let g:vimwiki_list = [{'path': '~/vimwiki', 'syntax': 'markdown', 'ext': '.md'}]
+
+autocmd BufNewFile,BufRead *.zig set filetype=zig
+let g:ycm_language_server =
+  \ [
+  \{
+  \     'name': 'zls',
+  \     'filetypes': [ 'zig' ],
+  \     'cmdline': [ '/path/to/zls_executable' ]
+  \    }
+  \ ]
 """ }}}
 
 """ KEYBINDS {{{
 
 noremap <Leader>f :Files<CR>
 noremap <Leader>gf :GFiles<CR>
+" noremap ygd :YcmC GoToDefinition<CR>
 
 """ }}}

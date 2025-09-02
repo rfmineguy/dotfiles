@@ -80,6 +80,7 @@ lazy.setup({
   { 'hrsh7th/nvim-cmp', event = { "InsertEnter", "CmdlineEnter" } },
 	{ 'williamboman/mason.nvim' },
 	{ 'williamboman/mason-lspconfig.nvim' },
+	{ 'L3MON4D3/LuaSnip', version = "v2.*", build = "make install_jsregexp", dependencies = { "rafamadriz/friendly-snippets" }},
 
   { 'lewis6991/gitsigns.nvim' },
   { 'nvim-telescope/telescope.nvim', tag = '0.1.5' },
